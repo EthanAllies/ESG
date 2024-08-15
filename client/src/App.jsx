@@ -1,58 +1,24 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import axios from 'axios'
+import {Link,Outlet,Route,Routes} from "react-router-dom"
+import MainLayout from "./layouts/mainLayout"
+import PdfPage from "./pages/PdfPage"
+import DashBoardPage from "./pages/DashBoardPage"
+import AudioPage from "./pages/AudioPage"
+import QuizPage from "./pages/QuizPage"
+import FaqPage from "./pages/FaqPage"
 
 function App() {
-  const [data, setData] = useState([])
-  const [name, setName] = useState("")
-
-  //something for the page to do on load
-  useEffect(() => {
-    getData();
-    setName("Ethan")
-  }, [])
-
-  //fetch data from the API
-  async function getData(){
-    const apiResponse = await axios.get("http://localhost:3000/pdf")
-  setData(apiResponse.data)
-  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>ESG-UCT</h1>
-
-      <div>My Name is: {name}</div>
-
-      <table>
-        <thead>
-          <tr>
-          <th>Title</th>
-          <th>Descr</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => {
-            return (
-            <tr key={index}>
-              <td>{item.title}</td>
-              <td>{item.description}</td>
-            </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </>
+<Routes>
+  <Route path="/" element={<MainLayout/>}>
+    <Route index element={<PdfPage/>} />
+    <Route path="pdf" element={<PdfPage/>} />
+    <Route path="dashboard" element={<DashBoardPage/>}/>
+    <Route path="audio" element={<AudioPage/>}/>
+    <Route path="quiz" element={<QuizPage/>}/>
+    <Route path="faqs" element={<FaqPage/>}/>
+  </Route>
+</Routes>
   )
 }
 
