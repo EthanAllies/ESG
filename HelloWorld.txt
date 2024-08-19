@@ -1,3 +1,7 @@
 My name is Ethan
+<<<<<<< HEAD
 Hi my name is Ally
 Hello my name is Mitchell
+=======
+Hi my name is Ally!!
+>>>>>>> 648a923c0f23c3afdf2fce9f328b5fd8035ae860

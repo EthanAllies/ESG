@@ -13,23 +13,23 @@ export default function SideBar() {
       <div className='flex flex-col pl-14 space-y-12 text-base'>
         <div className="flex flex-row items-center space-x-2 py-2 ">
           <FaHome color='white' />
-          <Link to='/pdf' className="text-white">Dashboard</Link>
+          <Link to='/dashboard' className="text-white">Dashboard</Link>
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaBook color='white' />
-          <Link to="/audio" className="text-white">Chapters</Link>
+          <Link to="/pdf" className="text-white">Chapters</Link>
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaAudible color='white' />
-          <div className="text-white">Audios</div>
+          <Link to="/audio" className="text-white">Audio</Link>
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaPaperclip color='white' />
-          <div className="text-white">Quizzes</div>
+          <Link to="/quiz" className="text-white">Quiz</Link>
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaQuestion color='white' />
-          <div className="text-white">FAQs</div>
+          <Link to="/faqs" className="text-white">FAQs</Link>
         </div>
       </div>
 
