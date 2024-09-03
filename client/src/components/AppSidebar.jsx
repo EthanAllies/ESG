@@ -21,11 +21,19 @@ export default function SideBar() {
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaAudible color='white' />
+<<<<<<< HEAD
           <Link to="/audio" className="text-white">Audios</Link>
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaPaperclip color='white' />
           <Link to="/quiz" className="text-white">Quizzes</Link>
+=======
+          <Link to="/audio" className="text-white">Audio</Link>
+        </div>
+        <div className="flex flex-row items-center space-x-2 py-2">
+          <FaPaperclip color='white' />
+          <Link to="/quiz" className="text-white">Quiz</Link>
+>>>>>>> 739a6ffabfb96ed11c5cc27b1a495f927438cc5b
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaQuestion color='white' />
