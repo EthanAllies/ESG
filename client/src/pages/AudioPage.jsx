@@ -1,5 +1,5 @@
 export default function AudioPage(){
     return(
-        <div>AudioPage</div>
+        <div className="">AudioPage</div>
     )
 }
