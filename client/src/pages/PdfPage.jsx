@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 export default function PdfPage() {
     const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
 
     const pdfs = [
-        { id: 1, title: 'Many students experience culture shock in the UCT environment. What is culture, and why can UCT’s culture cause an identity crisis or the feeling that you’re an imposter? This chapter will help you understand and start to manage your UCT experience. And, if you’re not experiencing these things, then this chapter is a window to understanding those who are.', imgSrc: 'Chapter1.png' },
-        { id: 2, title: 'Surviving the first semester at UCT has been an incredible journey thus far, but the challenge isnt over yet. Writing your exams is the final challenge that you will need to conquer. To succeed, careful planning and diligent preparation is key. This chapter is your guide to what you can expect from your first UCT exam season.', imgSrc: 'Chapter2.png' },
+        { id: 1, title: 'Many students experience culture shock in the UCT environment. What is culture, and why can UCT’s culture cause an identity crisis or the feeling that you’re an imposter? This chapter will help you understand and start to manage your UCT experience. And, if you’re not experiencing these things, then this chapter is a window to understanding those who are.', imgSrc: 'Chapter1.png',file: 'CultureShockAtUCT.pdf' },
+        { id: 2, title: 'Surviving the first semester at UCT has been an incredible journey thus far, but the challenge isnt over yet. Writing your exams is the final challenge that you will need to conquer. To succeed, careful planning and diligent preparation is key. This chapter is your guide to what you can expect from your first UCT exam season.', imgSrc: 'Chapter2.png'},
         { id: 3, title: 'Welcome to the exciting realm of university tests, where things are different from what youre used to in school. This chapter is your guide to what you can expect in these tests, packed with study tips and test strategies. Its time to level up your study skills to ace those first university tests!', imgSrc: 'Chapter3.png' },
         { id: 4, title: 'UCT is a tough environment. Don’t fall into the trap of thinking that you already have this time management thing down. The time management skills that you developed at school will probably not be sufficient. You need to take your time management skills to the next level if you want to do well at UCT.', imgSrc: 'Chapter4.png' },
         { id: 5, title: 'With exams drawing to a close, what are your hopes and fears for the vac? This chapter contains essential information about what you must do during the vac. We also have suggestions to help you make the most of the vac. Read this before going home, so that you download what you need, before you leave.', imgSrc: 'Chapter5.png' },
@@ -19,25 +20,36 @@ export default function PdfPage() {
         pdf.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const handlePdfClick = (pdf) => {
+        if (pdf.id === 1) {
+          navigate(`/pdf-viewer/${pdf.file}`);
+        }
+      };
+
     return (
-        <div className="flex flex-col w-full h-full p-4 bg-white">
-            <div className="flex items-center mb-4">
-                <input
-                    type="text"
-                    placeholder="Search PDFs..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full p-2 border rounded"
-                />
-            </div>
+        <div className="flex flex-col items-center w-full h-full p-4 bg-white">
+            {/* Heading */}
+            <h1 className="text-3xl font-semibold mb-4">Chapters</h1>
+
+            {/* Search bar */}
+            <input
+                type="text"
+                placeholder="Search Chapters..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-3/4 md:w-1/2 p-2 border rounded mb-6 text-center"
+            />
+
+            {/* PDF grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {filteredPdfs.map(pdf => (
+                {pdfs.map(pdf => (
                     <div
                         key={pdf.id}
                         className="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer"
+                        onClick={() => handlePdfClick(pdf)}
                     >
-                        <img src={pdf.imgSrc} alt={pdf.title} className="w-full h-32 object-cover rounded mb-2" />
-                        <h3 className="text-center font-semibold">{pdf.title}</h3>
+                        <img src={pdf.imgSrc} alt={pdf.title} className="w-full h-40 object-contain rounded mb-2" />
+                        <h3 className="text-center font-normal text-sm">{pdf.title}</h3>
                     </div>
                 ))}
             </div>
