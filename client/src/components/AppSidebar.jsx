@@ -25,7 +25,7 @@ export default function SideBar() {
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaPaperclip color='white' />
-          <Link to="/quiz" className="text-white">Quiz</Link>
+          <Link to="/quiz" className="text-white">Quizzes</Link>
         </div>
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaQuestion color='white' />
