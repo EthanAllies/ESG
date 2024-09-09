@@ -1,0 +1,30 @@
+.quiz-page {
+  padding: 20px;
+  text-align: center;
+}
+
+.quiz-page h1 {
+  font-size: 48px; /* Make the header larger */
+  margin-bottom: 30px;
+}
+
+.quiz-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Style for 2 cards per row */
+.quiz-card {
+  flex: 0 0 calc(50% - 20px); /* Each card takes 50% width minus gap */
+  max-width: calc(50% - 20px);
+}
+
+/* Make sure it works well on smaller screens */
+@media (max-width: 768px) {
+  .quiz-card {
+    flex: 0 0 calc(100% - 20px); /* Each card takes full width on smaller screens */
+    max-width: calc(100% - 20px);
+  }
+}
