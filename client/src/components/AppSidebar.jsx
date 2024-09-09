@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 export default function SideBar() {
 
   return (
+    
     <div className="bg-gradient-to-b from-white from-2% to-regal-blue to to-0% h-screen w-60">
       <div className="flex flex-row items-center py-8 pl-4">
         <img className="w-24 h-24" src="/uct_logo.png" />
