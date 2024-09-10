@@ -22,6 +22,13 @@ To deploy the site to firebase
 > firebase deploy
 ```
 
+To show react forms
+
+```bash
+> npm install @tailwindcss/forms
+> npm install @heroicons/react
+```
+
     
 ## Server
     Express server MongoDB 

@@ -4,6 +4,6 @@
 
 @layer components {
     .btn-signup {
-      @apply bg-white outline outline-regal-blue px-5 py-2 text-base   hover:bg-slate-950 hover:text-white rounded-xl
+      @apply bg-white outline outline-regal-blue px-5 py-2 text-base   hover:bg-regal-blue hover:text-white rounded-xl
     }
   }

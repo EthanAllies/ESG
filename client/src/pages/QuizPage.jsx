@@ -21,7 +21,7 @@ const QuizPage = () => {
     <div className="quiz-page">
       <h1>Quizzes</h1>
       <div className="quiz-list">
-        {quizzes.map((quiz, index) => (
+        {quizzes.map ((quiz, index) => (
           <QuizCard
             key={index}
             title={quiz.title}

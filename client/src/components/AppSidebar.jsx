@@ -1,4 +1,5 @@
-import { FaBook, FaAudible, FaAudioDescription, FaRegFileAudio, FaHome, FaPaperclip, FaQuestion } from 'react-icons/fa'
+import { FaBook, FaAudible, FaAudioDescription, FaRegFileAudio, FaHome, FaPaperclip, FaQuestion} from 'react-icons/fa'
+import { FaPerson } from "react-icons/fa6";
 import { Link } from 'react-router-dom'
 export default function SideBar() {
 
@@ -31,6 +32,10 @@ export default function SideBar() {
         <div className="flex flex-row items-center space-x-2 py-2">
           <FaQuestion color='white' />
           <Link to="/faqs" className="text-white">FAQs</Link>
+        </div>
+        <div className="flex flex-row items-center space-x-2 py-2">
+          <FaPerson color='white' />
+          <Link to="/profile" className="text-white">Profile</Link>
         </div>
       </div>
 
