@@ -1,9 +1,7 @@
-// src/pages/QuizPage.jsx
 import React from "react";
-import QuizCard from "../components/QuizCard";
-import "./QuizPage.css";
+import QuizProgressCard from "../components/QuizProgressCard";
 
-const QuizPage = () => {
+export default function QuizPage() {
   // Mock data for quizzes
   const quizzes = [
     { title: "Welcome to the Student Guide", score: 70 },
@@ -18,20 +16,19 @@ const QuizPage = () => {
   ];
 
   return (
-    <div className="quiz-page">
-      <h1>Quizzes</h1>
-      <div className="quiz-list">
+    <div className="p-5 text-center">
+      <h1 className="text-4xl mb-8">Quizzes</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
         {quizzes.map((quiz, index) => (
-          <QuizCard
-            key={index}
-            title={quiz.title}
-            score={quiz.score}
-            link={quiz.link}
-          />
+          <div key={index} className="w-full">
+            <QuizProgressCard
+              title={quiz.title}
+              score={quiz.score}
+              link={quiz.link}
+            />
+          </div>
         ))}
       </div>
     </div>
   );
-};
-
-export default QuizPage;
+}
