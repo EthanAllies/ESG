@@ -12,7 +12,7 @@ export default function Prof() {
   const [username, setName] = useState('');
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault(); // stop from refreshing page 
     await axios.patch("http://localhost:3000/user", {
       email: dbUser.email,       // Replace with the user's email
       displayName: username   // The new display name
