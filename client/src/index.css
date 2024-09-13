@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 @layer components {
-    .btn-signup {
-      @apply bg-white outline outline-regal-blue px-5 py-2 text-base   hover:bg-regal-blue hover:text-white rounded-xl
-    }
+  .btn-signup {
+    @apply bg-white outline outline-regal-blue px-5 py-2 text-base   hover:bg-slate-950 hover:text-white rounded-xl;
   }
+}
+
+@layer components {
+  .quiz-badge {
+    @apply bg-yellow-400 text-black font-bold px-3 py-1.5 rounded-md mt-2;
+  }
+}
