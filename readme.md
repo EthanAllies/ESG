@@ -29,6 +29,11 @@ To show react forms
 > npm install @heroicons/react
 ```
 
+Connect to firebase
+```bash
+> npm install firebase
+```
+
     
 ## Server
     Express server MongoDB 

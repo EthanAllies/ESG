@@ -2,8 +2,12 @@
 import React from "react";
 import QuizCard from "../components/QuizCard";
 import "./QuizPage.css";
+import { useAuth } from "../context/AuthContext";
 
 const QuizPage = () => {
+
+  const { currentUser, logout } = useAuth();
+
   // Mock data for quizzes
   const quizzes = [
     { title: "Welcome to the Student Guide", score: 70 },

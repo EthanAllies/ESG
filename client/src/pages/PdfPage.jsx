@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function PdfPage() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [pdfs, setPdfs] = useState([])
     const navigate = useNavigate();
 
-    const pdfs = [
-        { id: 1, title: 'Many students experience culture shock in the UCT environment. What is culture, and why can UCT’s culture cause an identity crisis or the feeling that you’re an imposter? This chapter will help you understand and start to manage your UCT experience. And, if you’re not experiencing these things, then this chapter is a window to understanding those who are.', imgSrc: 'Chapter1.png',file: 'CultureShockAtUCT.pdf' },
-        { id: 2, title: 'Surviving the first semester at UCT has been an incredible journey thus far, but the challenge isnt over yet. Writing your exams is the final challenge that you will need to conquer. To succeed, careful planning and diligent preparation is key. This chapter is your guide to what you can expect from your first UCT exam season.', imgSrc: 'Chapter2.png'},
-        { id: 3, title: 'Welcome to the exciting realm of university tests, where things are different from what youre used to in school. This chapter is your guide to what you can expect in these tests, packed with study tips and test strategies. Its time to level up your study skills to ace those first university tests!', imgSrc: 'Chapter3.png' },
-        { id: 4, title: 'UCT is a tough environment. Don’t fall into the trap of thinking that you already have this time management thing down. The time management skills that you developed at school will probably not be sufficient. You need to take your time management skills to the next level if you want to do well at UCT.', imgSrc: 'Chapter4.png' },
-        { id: 5, title: 'With exams drawing to a close, what are your hopes and fears for the vac? This chapter contains essential information about what you must do during the vac. We also have suggestions to help you make the most of the vac. Read this before going home, so that you download what you need, before you leave.', imgSrc: 'Chapter5.png' },
-        { id: 6, title: 'Your ability to study successfully depends on your health and well-being. To have a successful year, you need to adopt a holistic approach, in which you pay attention to your physical, mental, spiritual, financial and academic well-being.', imgSrc: 'Chapter6.png' },
-        { id: 7, title: 'Your ability to study successfully depends on your health and well-being. To have a successful year, you need to adopt a holistic approach, in which you pay attention to your physical, mental, spiritual, financial and academic well-being.', imgSrc: 'Chapter7.png' },
-        { id: 8, title: 'Now is a good time to do some metacognition, i.e. to pause and think about what you did in the first quarter and what you want to do in the second quarter. By re-aligning yourself with your goals and values, you can be the best version of yourself for the rest of the year. In this chapter, we share some useful metacognition tools.', imgSrc: 'Chapter8.png' },
-    ];
+    useEffect(() => {
+fetchPdfs()
+    }, [])
+
+    async function fetchPdfs(){
+        const httpResponse = await axios.get("http://localhost:3000/docs") 
+        setPdfs(httpResponse.data)
+    }
+
+    // const pdfs = [
+    //     { id: 1, title: 'Many students experience culture shock in the UCT environment. What is culture, and why can UCT’s culture cause an identity crisis or the feeling that you’re an imposter? This chapter will help you understand and start to manage your UCT experience. And, if you’re not experiencing these things, then this chapter is a window to understanding those who are.', imgSrc: 'Chapter1.png', file: 'CultureShockAtUCT.pdf' },
+    //     { id: 2, title: 'Surviving the first semester at UCT has been an incredible journey thus far, but the challenge isnt over yet. Writing your exams is the final challenge that you will need to conquer. To succeed, careful planning and diligent preparation is key. This chapter is your guide to what you can expect from your first UCT exam season.', imgSrc: 'Chapter2.png' },
+    //     { id: 3, title: 'Welcome to the exciting realm of university tests, where things are different from what youre used to in school. This chapter is your guide to what you can expect in these tests, packed with study tips and test strategies. Its time to level up your study skills to ace those first university tests!', imgSrc: 'Chapter3.png' },
+    //     { id: 4, title: 'UCT is a tough environment. Don’t fall into the trap of thinking that you already have this time management thing down. The time management skills that you developed at school will probably not be sufficient. You need to take your time management skills to the next level if you want to do well at UCT.', imgSrc: 'Chapter4.png' },
+    //     { id: 5, title: 'With exams drawing to a close, what are your hopes and fears for the vac? This chapter contains essential information about what you must do during the vac. We also have suggestions to help you make the most of the vac. Read this before going home, so that you download what you need, before you leave.', imgSrc: 'Chapter5.png' },
+    //     { id: 6, title: 'Your ability to study successfully depends on your health and well-being. To have a successful year, you need to adopt a holistic approach, in which you pay attention to your physical, mental, spiritual, financial and academic well-being.', imgSrc: 'Chapter6.png' },
+    //     { id: 7, title: 'Your ability to study successfully depends on your health and well-being. To have a successful year, you need to adopt a holistic approach, in which you pay attention to your physical, mental, spiritual, financial and academic well-being.', imgSrc: 'Chapter7.png' },
+    //     { id: 8, title: 'Now is a good time to do some metacognition, i.e. to pause and think about what you did in the first quarter and what you want to do in the second quarter. By re-aligning yourself with your goals and values, you can be the best version of yourself for the rest of the year. In this chapter, we share some useful metacognition tools.', imgSrc: 'Chapter8.png' },
+    // ];
 
     const filteredPdfs = pdfs.filter(pdf =>
-        pdf.title.toLowerCase().includes(searchTerm.toLowerCase())
+        pdf.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handlePdfClick = (pdf) => {
-        if (pdf.id === 1) {
-          navigate(`/pdf-viewer/${pdf.file}`);
-        }
-      };
+        window.location.href =pdf.url;
+    };
+
+
 
     return (
         <div className="flex flex-col items-center w-full h-full p-4 bg-white">
@@ -44,12 +55,12 @@ export default function PdfPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {pdfs.map(pdf => (
                     <div
-                        key={pdf.id}
+                        key={pdf._id}
                         className="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer"
                         onClick={() => handlePdfClick(pdf)}
                     >
-                        <img src={pdf.imgSrc} alt={pdf.title} className="w-full h-40 object-contain rounded mb-2" />
-                        <h3 className="text-center font-normal text-sm">{pdf.title}</h3>
+                        <img src={pdf.imgurl} alt={pdf.name} className="w-full h-40 object-contain rounded mb-2" />
+                        <h3 className="text-center font-normal text-sm">{pdf.desc}</h3>
                     </div>
                 ))}
             </div>

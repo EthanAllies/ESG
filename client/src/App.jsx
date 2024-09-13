@@ -12,7 +12,7 @@ function App() {
   return (
 <Routes>
   <Route path="/" element={<MainLayout/>}>
-    <Route index element={<PdfPage/>} />
+    <Route index element={<DashBoardPage/>} />
     <Route path="pdf" element={<PdfPage/>} />
     <Route path="dashboard" element={<DashBoardPage/>}/>
     <Route path="audio" element={<AudioPage/>}/>

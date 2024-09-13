@@ -1,8 +1,19 @@
+import { useAuth } from "../context/AuthContext";
+
+
+
+
+
 export default function DashBoardPage(){
+
+    const { currentUser, logout, dbUser, setDBUser } = useAuth();
+
+
     return(
         <div className="w-full h-full ">
+             <div>{dbUser.displayName}</div>
             <div className="h-1/3 w-full flex justify-center ">
-                <div className="h-52 w-4/5 mt-11 outline rounded-lg"></div>
+                <div className="h-52 w-4/5 mt-11 outline rounded-lg "></div>
             </div>
             <div className="h-1/3 w-full flex ">
                 <div className="flex flex-col w-4/6 h-5/6 mr-5 ml-10 my-auto" >

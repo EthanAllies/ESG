@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Badge from "./Badge";
 import "./QuizCard.css";
 
 const QuizCard = ({ title, score, link }) => {
+
+
+  
+
   return (
     <div className="quiz-card">
       <h3>{title}</h3>
