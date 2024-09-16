@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "cp src/config-local.json src/config.json && vite",
     "build": "vite build",
     "lint": "eslint .",
+    "deploy": "cp src/config-prod.json src/config.json && vite build && firebase deploy",
     "preview": "vite preview"
   },
   "dependencies": {

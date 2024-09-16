@@ -19,10 +19,10 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 app.use(cors());
-app.listen(3000, function () {
+/*app.listen(3000, function () {
   console.log("Running on http://localhost:3000");
 });
-
+*/
 app.get("/docs", async (req, res) => {
   try {
     // Connect the client to the server (optional starting in v4.7)
@@ -91,6 +91,8 @@ app.patch("/user", async (req, res) => {
     // await client.close();
   }
 });
+
+module.exports = app
 
 
 

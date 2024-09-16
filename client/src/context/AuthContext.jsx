@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import axios from "axios";
+import config from "../config.json"
 
 const AuthContext = createContext();
 
@@ -22,10 +23,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   async function getUser() {
-    const httpResponse = await axios.get("http://localhost:3000/user/" + currentUser.email)
+    const httpResponse = await axios.get(`${config.api_url}/user/${currentUser.email}`)
     const user = httpResponse.data;
     if (user == null) {
-      await axios.post("http://localhost:3000/user", {
+      await axios.post(`${config.api_url}/user`, {
         displayName: currentUser.displayName,
         email: currentUser.email,
         score: 0,

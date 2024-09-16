@@ -2,6 +2,7 @@ import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import axios from 'axios';
+import config from "../config.json"
 
 
 export default function Prof() {
@@ -13,7 +14,7 @@ export default function Prof() {
 
   async function handleSubmit(e) {
     e.preventDefault(); // stop from refreshing page 
-    await axios.patch("http://localhost:3000/user", {
+    await axios.patch(`${config.api_url}/user`, {
       email: dbUser.email,       // Replace with the user's email
       displayName: username   // The new display name
     });
