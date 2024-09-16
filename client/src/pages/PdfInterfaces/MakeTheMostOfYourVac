@@ -1,5 +1,0 @@
-export default function MakeTheMostOfYourVac(){
-    return(
-        <div>MakeTheMostOfYourVac done</div>
-    )
-}

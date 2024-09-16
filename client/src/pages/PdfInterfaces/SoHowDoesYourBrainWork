@@ -1,5 +1,0 @@
-export default function SoHowDoesYourBrainWork(){
-    return(
-        <div>SoHowDoesYourBrainWork done</div>
-    )
-}

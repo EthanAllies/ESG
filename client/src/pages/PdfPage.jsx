@@ -8,7 +8,7 @@ export default function PdfPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-fetchPdfs()
+        fetchPdfs()
     }, [])
 
     async function fetchPdfs(){
@@ -32,9 +32,9 @@ fetchPdfs()
     );
 
     const handlePdfClick = (pdf) => {
-        window.location.href =pdf.url;
+        //window.location.href =pdf.url;
+        navigate(`/pdf-viewer/${pdf._id}`);
     };
-
 
 
     return (
