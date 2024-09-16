@@ -41,9 +41,7 @@ export default function MainLayout() {
           {currentUser ?
             <button onClick={logout} className='btn-signup'>Log Out</button> :
             <button onClick={handleGoogleSignIn} className='btn-signup'>Sign in</button>}
-          {currentUser ? <div>{currentUser.displayName}</div> : null}
-          {currentUser ? <div>{currentUser.email}</div> : null}
-          {currentUser ? <img src={currentUser.photoURL} className='h-[20px] w-[20px] rounded-full' /> : null}
+
         </div>
         <div className='h-[calc(100%-60px)] overflow-y-auto'>
           <Outlet />
