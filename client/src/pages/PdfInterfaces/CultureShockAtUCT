@@ -1,5 +1,0 @@
-export default function CultureShockAtUCT(){
-    return(
-        <div>CultureShockAtUCT done</div>
-    )
-}
