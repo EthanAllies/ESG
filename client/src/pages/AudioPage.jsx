@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import config from '../config.json';
 
 export default function AudioPage() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [audios, setAudios] = useState([]);
+    const [selectedAudioUrl, setSelectedAudioUrl] = useState(null); // State to store the selected audio URL
 
-    const audio = [
-        { id: 1, title: 'Many students experience culture shock in the UCT environment. What is culture, and why can UCT’s culture cause an identity crisis or the feeling that you’re an imposter? This chapter will help you understand and start to manage your UCT experience. And, if you’re not experiencing these things, then this chapter is a window to understanding those who are.', imgSrc: 'Chapter1.png' },
-        { id: 2, title: 'Surviving the first semester at UCT has been an incredible journey thus far, but the challenge isnt over yet. Writing your exams is the final challenge that you will need to conquer. To succeed, careful planning and diligent preparation is key. This chapter is your guide to what you can expect from your first UCT exam season.', imgSrc: 'Chapter2.png' },
-        { id: 3, title: 'Welcome to the exciting realm of university tests, where things are different from what youre used to in school. This chapter is your guide to what you can expect in these tests, packed with study tips and test strategies. Its time to level up your study skills to ace those first university tests!', imgSrc: 'Chapter3.png' },
-        { id: 4, title: 'UCT is a tough environment. Don’t fall into the trap of thinking that you already have this time management thing down. The time management skills that you developed at school will probably not be sufficient. You need to take your time management skills to the next level if you want to do well at UCT.', imgSrc: 'Chapter4.png' },
-        { id: 5, title: 'With exams drawing to a close, what are your hopes and fears for the vac? This chapter contains essential information about what you must do during the vac. We also have suggestions to help you make the most of the vac. Read this before going home, so that you download what you need, before you leave.', imgSrc: 'Chapter5.png' },
-        { id: 6, title: 'Your ability to study successfully depends on your health and well-being. To have a successful year, you need to adopt a holistic approach, in which you pay attention to your physical, mental, spiritual, financial and academic well-being.', imgSrc: 'Chapter6.png' },
-        { id: 7, title: 'Your ability to study successfully depends on your health and well-being. To have a successful year, you need to adopt a holistic approach, in which you pay attention to your physical, mental, spiritual, financial and academic well-being.', imgSrc: 'Chapter7.png' },
-        { id: 8, title: 'Now is a good time to do some metacognition, i.e. to pause and think about what you did in the first quarter and what you want to do in the second quarter. By re-aligning yourself with your goals and values, you can be the best version of yourself for the rest of the year. In this chapter, we share some useful metacognition tools.', imgSrc: 'Chapter8.png' },
-    ];
+    useEffect(() => {
+        fetchAudios();
+    }, []);
 
-    const filteredAudios = audio.filter(audio =>
-        audio.title.toLowerCase().includes(searchTerm.toLowerCase())
+    async function fetchAudios() {
+        const httpResponse = await axios.get(`${config.api_url}/docs`);
+        setAudios(httpResponse.data);
+    }
+
+    const filteredAudios = audios.filter(audio =>
+        audio.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleAudioClick = (audio) => {
+        setSelectedAudioUrl(pdf.audiourl); // Set the URL of the selected audio
+    };
 
     return (
         <div className="flex flex-col items-center w-full h-full p-4 bg-white">
@@ -30,21 +35,36 @@ export default function AudioPage() {
                 placeholder="Search Audios..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-3/4 md:w-1/2 p-2 border rounded mb-6 text-center"
+                className="w-3/4 md:w-1/2 border-gray-200 p-2 drop-shadow-md rounded-full mb-6 text-center"
             />
 
             {/* Audio grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {audio.map(audio => (
+                {filteredAudios.map(audio => (
                     <div
-                        key={audio.id}
+                        key={audio._id}
                         className="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer"
+                        onClick={() => handleAudioClick(audio)}
                     >
-                        <img src={audio.imgSrc} alt={audio.title} className="w-full h-40 object-contain rounded mb-2" />
-                        <h3 className="text-center font-normal text-sm">{audio.title}</h3>
+                        <img src={audio.imgurl} alt={audio.name} className="w-full h-40 object-contain rounded mb-2" />
+                        <h3 className="text-center font-normal text-sm">{audio.desc}</h3>
                     </div>
                 ))}
             </div>
+
+            {/* Conditional rendering of the iframe */}
+            {selectedAudioUrl && (
+                <div className="w-full mt-4">
+                    <iframe
+                        src={selectedAudioUrl}
+                        width="100%"
+                        height="80"
+                        frameBorder="0"
+                        allow="autoplay"
+                        title="Audio Player"
+                    ></iframe>
+                </div>
+            )}
         </div>
     );
 }
