@@ -22,9 +22,9 @@ export default function PdfPage() {
     );
 
     const handlePdfClick = (pdf) => {
-        window.location.href =pdf.url;
-        //console.log("Selected PDF:", pdf); // Debugging line
-        //navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); // Pass encoded URL
+        //window.location.href =pdf.url;
+        console.log("Selected PDF:", pdf); // Debugging line
+        navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); // Pass encoded URL
 
     useEffect(() => {
         if (id) {
