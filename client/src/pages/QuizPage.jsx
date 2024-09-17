@@ -1,8 +1,20 @@
-import React from "react";
-//import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import QuizProgressCard from "../components/QuizProgressCard";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import config from "../config.json";
 
 export default function QuizPage() {
+  const [quizzes, setQuizzes] = useState([]);
+  //  const [loading, setLoading] = useState(true);
+  //  const [error, setError] = useState(null);
+
+  async function fetchQuizzes() {
+    const httpResponse = await axios.get(`${config.api_url}/quizzes`);
+    setQuizzes(httpResponse.data);
+  }
+
   // Mock data for quizzes
   /*const quizzes = [
     { title: "Welcome to the Student Guide", score: 70 },
@@ -15,8 +27,9 @@ export default function QuizPage() {
     { title: "The Shape of Your Well-Being", score: 70 },
     { title: "Metacognition: Your Key to Success", score: 70 },
   ];*/
+  const { currentUser, logout, dbUser, setDBUser } = useAuth();
 
-  const quizzes = [
+  /*const quizzes = [
     {
       id: 1,
       title: "Welcome to the Student Guide",
@@ -36,26 +49,23 @@ export default function QuizPage() {
       description: "Quiz on how to ace exams.",
     },
     // Add more quizzes as needed
-  ];
+  ];*/
 
   return (
     <div className="p-5 text-center">
-      <h1 className="text-4xl mb-8">Quizzes</h1>
+      <h1 className="text-4xl mb-8">Quizzes for {dbUser.displayName}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
         {quizzes.map((quiz) => (
           <div key={quiz.id} className="w-full">
             {/* Link each quiz to its detail page */}
-            {
-              //<Link to={`/quiz/${quiz.id}`}>
-            }
-            <QuizProgressCard
-              title={quiz.title}
-              score={quiz.score}
-              link={`/quiz/${quiz.id}`}
-            />
-            {
-              //</Link}>
-            }
+
+            <Link to={`/quiz/${quiz.id}`}>
+              <QuizProgressCard
+                title={quiz.title}
+                score={quiz.score}
+                link={`/quiz/${quiz.id}`}
+              />
+            </Link>
           </div>
         ))}
       </div>
