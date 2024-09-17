@@ -22,8 +22,23 @@ export default function PdfPage() {
   );
 
   const handlePdfClick = (pdf) => {
-    //window.location.href =pdf.url;
-    navigate(`/pdf-viewer/${pdf._id}`);
+    window.location.href = pdf.url;
+    //console.log("Selected PDF:", pdf); // Debugging line
+    //navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); // Pass encoded URL
+
+    useEffect(() => {
+      if (id) {
+        try {
+          // Decode the URL and ensure it's safe to use
+          const decodedUrl = decodeURIComponent(id);
+          setPdfUrl(decodedUrl);
+          setLoading(false); // Set loading to false since URL is ready
+        } catch (error) {
+          console.error("Error decoding URL:", error);
+          setLoading(false);
+        }
+      }
+    }, [id]);
   };
 
   return (
