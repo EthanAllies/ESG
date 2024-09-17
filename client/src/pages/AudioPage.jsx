@@ -6,6 +6,7 @@ export default function AudioPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [audios, setAudios] = useState([]);
     const [selectedAudioUrl, setSelectedAudioUrl] = useState(null); // State to store the selected audio URL
+    const [selectedAudioName, setSelectedAudioName] = useState(''); // State to store the selected audio name
 
     useEffect(() => {
         fetchAudios();
@@ -21,7 +22,8 @@ export default function AudioPage() {
     );
 
     const handleAudioClick = (audio) => {
-        setSelectedAudioUrl(pdf.audiourl); // Set the URL of the selected audio
+        setSelectedAudioUrl(audio.audiourl); // Set the URL of the selected audio
+        setSelectedAudioName(audio.name); // Set the name of the selected audio
     };
 
     return (
@@ -38,6 +40,19 @@ export default function AudioPage() {
                 className="w-3/4 md:w-1/2 border-gray-200 p-2 drop-shadow-md rounded-full mb-6 text-center"
             />
 
+            {/* Conditional rendering of the selected audio name and iframe */}
+            {selectedAudioUrl && (
+                <div className="w-3/4 md:w-1/2 mb-4 text-center">
+                    <h2 className="text-xl font-semibold mb-2">{selectedAudioName}</h2> {/* Display audio name */}
+                    <iframe
+                        src={selectedAudioUrl}
+                        className="w-full h-20 bg-white rounded"
+                        allow="autoplay"
+                        title="Audio Player"
+                    ></iframe>
+                </div>
+            )}
+
             {/* Audio grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {filteredAudios.map(audio => (
@@ -51,20 +66,6 @@ export default function AudioPage() {
                     </div>
                 ))}
             </div>
-
-            {/* Conditional rendering of the iframe */}
-            {selectedAudioUrl && (
-                <div className="w-full mt-4">
-                    <iframe
-                        src={selectedAudioUrl}
-                        width="100%"
-                        height="80"
-                        frameBorder="0"
-                        allow="autoplay"
-                        title="Audio Player"
-                    ></iframe>
-                </div>
-            )}
         </div>
     );
 }
