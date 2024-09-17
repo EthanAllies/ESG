@@ -5,6 +5,7 @@ import PdfViewer from "./pages/PdfViewer";
 import DashBoardPage from "./pages/DashBoardPage";
 import AudioPage from "./pages/AudioPage";
 import QuizPage from "./pages/QuizPage";
+import QuizDetailPage from "./pages/QuizDetailPage";
 import FaqPage from "./pages/FaqPage";
 import ProfilePage from "./pages/ProfilePage";
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="dashboard" element={<DashBoardPage />} />
         <Route path="audio" element={<AudioPage />} />
         <Route path="quiz" element={<QuizPage />} />
+        <Route path="quiz/:quizId" element={<QuizDetailPage />} />
         <Route path="faqs" element={<FaqPage />} />
         <Route path="profile" element={<ProfilePage />} />
       </Route>

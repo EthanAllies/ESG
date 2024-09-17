@@ -7,13 +7,29 @@ import config from "../config.json";
 
 export default function QuizPage() {
   const [quizzes, setQuizzes] = useState([]);
-  //  const [loading, setLoading] = useState(true);
-  //  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { dbUser } = useAuth();
 
   async function fetchQuizzes() {
-    const httpResponse = await axios.get(`${config.api_url}/quizzes`);
-    setQuizzes(httpResponse.data);
+    try {
+      const httpResponse = await axios.get(`${config.api_url}/quizzes`);
+      console.log("Fetched quizzes:", httpResponse.data); // Debugging line
+      setQuizzes(httpResponse.data);
+    } catch (err) {
+      console.error("Error fetching quizzes:", err);
+      setError("Failed to fetch quizzes.");
+    } finally {
+      setLoading(false);
+    }
   }
+
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+  if (loading) return <p>Loading quizzes...</p>;
+  if (error) return <p>{error}</p>;
 
   // Mock data for quizzes
   /*const quizzes = [
@@ -27,47 +43,39 @@ export default function QuizPage() {
     { title: "The Shape of Your Well-Being", score: 70 },
     { title: "Metacognition: Your Key to Success", score: 70 },
   ];*/
-  const { currentUser, logout, dbUser, setDBUser } = useAuth();
-
-  /*const quizzes = [
-    {
-      id: 1,
-      title: "Welcome to the Student Guide",
-      score: 70,
-      description: "This is a student guide quiz.",
-    },
-    {
-      id: 2,
-      title: "Culture Shock at UCT",
-      score: 85,
-      description: "A quiz about adapting to UCT.",
-    },
-    {
-      id: 3,
-      title: "Acing Exam Season",
-      score: 100,
-      description: "Quiz on how to ace exams.",
-    },
-    // Add more quizzes as needed
-  ];*/
 
   return (
     <div className="p-5 text-center">
-      <h1 className="text-4xl mb-8">Quizzes for {dbUser.displayName}</h1>
+      <h1 className="text-4xl mb-8">
+        Quizzes for {dbUser?.displayName || "User"}
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
-        {quizzes.map((quiz) => (
-          <div key={quiz.id} className="w-full">
-            {/* Link each quiz to its detail page */}
+        {quizzes.length === 0 ? (
+          <p>No quizzes available</p>
+        ) : (
+          quizzes.map((quiz) => {
+            // Check if dbUser and quizScores are defined
+            const userQuizScore = dbUser?.scores?.find(
+              (score) => String(score.quiz_id) === String(quiz.quiz_id) // Normalize to string
+            );
 
-            <Link to={`/quiz/${quiz.id}`}>
-              <QuizProgressCard
-                title={quiz.title}
-                score={quiz.score}
-                link={`/quiz/${quiz.id}`}
-              />
-            </Link>
-          </div>
-        ))}
+            // Extract score, or default to null if not found
+            const score = userQuizScore ? userQuizScore.score : 0;
+
+            return (
+              <div key={quiz.quiz_id} className="w-full">
+                <h1>{}</h1>
+                <Link to={`/quiz/${quiz.quiz_id}`}>
+                  <QuizProgressCard
+                    title={quiz.quiz_name}
+                    score={score}
+                    link={`/quiz/${quiz.quiz_id}`}
+                  />
+                </Link>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

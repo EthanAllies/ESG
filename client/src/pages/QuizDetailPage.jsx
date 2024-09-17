@@ -1,105 +1,87 @@
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import config from "../config.json";
 
 const QuizDetailPage = () => {
   const { quizId } = useParams(); // Get quizId from URL
+  const { dbUser } = useAuth(); // Access user data from AuthContext
+  const [quiz, setQuiz] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [score, setScore] = useState(null); // New state for storing the score
 
-  const quizzes = [
-    {
-      id: 1,
-      title: "Welcome to the Student Guide",
-      score: 70,
-      description: "This is a student guide quiz.",
-      questions: [
-        {
-          id: 1,
-          question: "What is the capital of France?",
-          options: ["Berlin", "Madrid", "Paris", "Rome"],
-          answer: "Paris",
-        },
-        {
-          id: 2,
-          question: "What is 2 + 2?",
-          options: ["3", "4", "5", "6"],
-          answer: "4",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Culture Shock at UCT",
-      score: 85,
-      description: "A quiz about adapting to UCT.",
-      questions: [
-        {
-          id: 1,
-          question: "What is UCT?",
-          options: [
-            "University of Cape Town",
-            "University of Chicago",
-            "University of California",
-            "University College London",
-          ],
-          answer: "University of Cape Town",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Acing Exam Season",
-      score: 100,
-      description: "Quiz on how to ace exams.",
-      questions: [
-        {
-          id: 1,
-          question: "What is a good study technique?",
-          options: [
-            "Cramming",
-            "Spaced repetition",
-            "Studying the night before",
-            "Passive reading",
-          ],
-          answer: "Spaced repetition",
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    async function fetchQuiz() {
+      try {
+        const response = await axios.get(`${config.api_url}/quizzes/${quizId}`);
+        setQuiz(response.data);
+      } catch (err) {
+        console.error("Error fetching quiz details:", err);
+        setError("Failed to fetch quiz details.");
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  // Find the quiz by its id
-  const quiz = quizzes.find((q) => q.id === parseInt(quizId));
+    fetchQuiz();
+  }, [quizId]);
 
   const handleOptionClick = (questionId, option) => {
-    setSelectedAnswers({
-      ...selectedAnswers,
+    setSelectedAnswers((prevSelectedAnswers) => ({
+      ...prevSelectedAnswers,
       [questionId]: option,
-    });
+    }));
   };
 
-  // If quiz is not found, show a message
-  if (!quiz) {
-    return <div>Quiz not found.</div>;
-  }
+  const handleSubmit = () => {
+    if (!quiz) return;
+
+    const totalQuestions = quiz.questions.length;
+    let correctAnswers = 0;
+
+    quiz.questions.forEach((question) => {
+      console.log(selectedAnswers);
+      const selectedAnswer = selectedAnswers[question.question_id];
+      console.log(selectedAnswer);
+      if (selectedAnswer === question.correct_answer) {
+        correctAnswers += 1;
+      }
+    });
+
+    // Calculate percentage
+    const percentage = (correctAnswers / totalQuestions) * 100;
+    setScore(percentage);
+  };
+
+  if (loading) return <p>Loading quiz...</p>;
+  if (error) return <p>{error}</p>;
+  if (!quiz) return <p>Quiz not found.</p>;
 
   return (
     <div className="p-5 text-center">
-      <h1 className="text-4xl mb-4">{quiz.title}</h1>
-      <p className="text-lg mb-8">{quiz.description}</p>
-      <p className="text-2xl mb-4">Score: {quiz.score}%</p>
+      <h1 className="text-4xl mb-4">{quiz.quiz_name}</h1>
+      <p className="text-2xl mb-4">
+        Score: {score !== null ? `${score}%` : "Not submitted yet"}
+      </p>
       <div>
         {quiz.questions.map((question) => (
-          <div key={question.id} className="mb-6 text-left">
-            <h2 className="text-xl mb-2">{question.question}</h2>
+          <div key={question.question_id} className="mb-6 text-left">
+            <h2 className="text-xl mb-2">{question.question_text}</h2>
             <div className="space-y-2">
               {question.options.map((option, index) => (
                 <button
-                  key={index}
+                  key={`${question.question_id}-option-${index}`} // Unique key combining question_id and index
                   className={`w-full p-2 text-left border rounded ${
-                    selectedAnswers[question.id] === option
+                    selectedAnswers[question.question_id] === option
                       ? "bg-gray-300"
                       : "bg-white"
                   }`}
-                  onClick={() => handleOptionClick(question.id, option)}
+                  onClick={() =>
+                    handleOptionClick(question.question_id, option)
+                  }
                 >
                   {option}
                 </button>
@@ -108,6 +90,12 @@ const QuizDetailPage = () => {
           </div>
         ))}
       </div>
+      <button
+        className="mt-4 p-2 bg-blue-500 text-white rounded"
+        onClick={handleSubmit}
+      >
+        Submit
+      </button>
     </div>
   );
 };

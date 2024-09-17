@@ -36,6 +36,40 @@ app.get("/docs", async (req, res) => {
   }
 });
 
+app.get("/quizzes", async (req, res) => {
+  try {
+    // Connect the client to the server (optional starting in v4.7)
+    await client.connect();
+    const data = await client.db("ESG").collection("quizzes").find().toArray();
+    res.json(data);
+  } finally {
+    // Ensures that the client will close when you finish/error
+    //await client.close();
+  }
+});
+
+app.get("/quizzes/:quizId", async (req, res) => {
+  try {
+    await client.connect();
+    const quizId = req.params.quizId;
+    const data = await client
+      .db("ESG")
+      .collection("quizzes")
+      .findOne({ quiz_id: quizId });
+    if (data) {
+      res.json(data);
+    } else {
+      res.status(404).send("Quiz not found.");
+    }
+  } catch (err) {
+    console.error("Error fetching quiz:", err);
+    res.status(500).send("Server error.");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    //await client.close();
+  }
+});
+
 app.get("/user/:email", async (req, res) => {
   const params = req.params;
 
@@ -106,9 +140,4 @@ app.patch("/user", async (req, res) => {
   }
 });
 
-module.exports = app
-
-
-
-
-
+module.exports = app;
