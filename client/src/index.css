@@ -13,3 +13,13 @@
     @apply bg-yellow-400 text-black font-bold px-3 py-1.5 rounded-md mt-2;
   }
 }
+
+@layer components {
+  .badge-img {
+    object-fit: contain; /* Ensures the image retains its aspect ratio */
+    border-radius: 50%; /* Optional: Add a circular shape to the badge */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+    padding: 5px; /* Adds space around the image */
+    background-color: white; /* Optional: White background to highlight the badge */
+  }
+}

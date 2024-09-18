@@ -110,11 +110,13 @@ const QuizDetailPage = () => {
 
   return (
     <div className="p-5 text-center">
-      <h1 className="text-4xl mb-4">{quiz.quiz_name}</h1>
+      <h1 className="font-bold text-4xl mb-4">{quiz.quiz_name}</h1>
       <div>
         {quiz.questions.map((question) => (
-          <div key={question.question_id} className="mb-6 text-left">
-            <h2 className="text-xl mb-2">{question.question_text}</h2>
+          <div key={question.question_id} className="m-12 mb-6 text-left">
+            <h2 className="font-semibold text-xl mb-2">
+              {question.question_text}
+            </h2>
             <div className="space-y-2">
               {question.options.map((option, index) => (
                 <div
@@ -144,10 +146,10 @@ const QuizDetailPage = () => {
         ))}
       </div>
       <button
-        className="mt-4 p-2 bg-blue-500 text-white rounded"
+        className="m-16 mt-4 p-2 bg-blue-500 text-white rounded"
         onClick={handleSubmit}
       >
-        Submit
+        Save & Submit
       </button>
     </div>
   );
