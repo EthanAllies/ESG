@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 //connect to db
 
@@ -67,6 +67,72 @@ app.get("/quizzes/:quizId", async (req, res) => {
   } finally {
     // Ensures that the client will close when you finish/error
     //await client.close();
+  }
+});
+
+app.patch("/update-score", async (req, res) => {
+  console.log("Request received:", req.body); // Log request body
+  const { studentId, quizId, newScore } = req.body;
+
+  try {
+    // Convert studentId to ObjectId
+    const objectId = new ObjectId(studentId);
+
+    // Update the score
+    const result = await client
+      .db("ESG")
+      .collection("students")
+      .updateOne(
+        { _id: objectId, "scores.quiz_id": quizId },
+        { $set: { "scores.$.score": newScore } }
+      );
+
+    console.log("Update result:", result); // Log result to see if any documents were updated
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: "Student or quiz not found" });
+    }
+
+    res.status(200).json({ message: "Score updated successfully" });
+  } catch (error) {
+    console.error("Error updating score:", error);
+    res.status(500).json({ error: "Server error", details: error.message });
+  }
+});
+
+app.get("/get-score", async (req, res) => {
+  const { studentId, quizId } = req.query;
+
+  console.log("Student ID:", studentId, "Quiz ID:", quizId); // Debugging
+  try {
+    // Check if studentId is a valid ObjectId and create ObjectId instance
+    const studentIdObject = ObjectId.isValid(studentId)
+      ? new ObjectId(studentId)
+      : studentId;
+
+    await client.connect();
+    const student = await client
+      .db("ESG")
+      .collection("students")
+      .findOne({ _id: studentIdObject });
+    console.log(student);
+    // Check if student is found
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+    console.log(student.scores);
+    // Ensure scores array exists and look for the quiz ID in the scores array
+    const scoreData = student.scores?.find((score) => score.quiz_id === quizId);
+    console.log(student.scores, scoreData);
+
+    if (scoreData) {
+      res.json({ score: scoreData.score }); // Return the found score
+    } else {
+      res.json({ score: null }); // No score found for this quiz
+    }
+  } catch (error) {
+    console.error("Error fetching score:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
