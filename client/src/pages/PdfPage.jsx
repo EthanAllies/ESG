@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import config from "../config.json";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import config from '../config.json';
 
 export default function PdfPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -9,26 +9,26 @@ export default function PdfPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-      if (id) {
-        try {
-          // Decode the URL and ensure it's safe to use
-          const decodedUrl = decodeURIComponent(id);
-          setPdfUrl(decodedUrl);
-          setLoading(false); // Set loading to false since URL is ready
-        } catch (error) {
-          console.error("Error decoding URL:", error);
-          setLoading(false);
-        }
-      }
-    }, [id]);
-  };
+        fetchPdfs();
+    }, []);
 
-  return (
-    <div className="flex flex-col items-center w-full h-full p-4 bg-white">
-      {/* Heading */}
-      <h1 className="text-3xl font-semibold mb-4">Chapters</h1>
+    async function fetchPdfs() {
+        const httpResponse = await axios.get(`${config.api_url}/docs`);
+        setPdfs(httpResponse.data);
+    }
 
-            {/* Search bar */}
+    const filteredPdfs = pdfs.filter(pdf =>
+        pdf.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handlePdfClick = (pdf) => {
+        console.log("Selected PDF:", pdf);
+        navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`);
+    };
+
+    return (
+        <div className="flex flex-col items-center w-full h-full p-4 bg-white">
+            <h1 className="text-3xl font-semibold mb-4">Chapters</h1>
             <input
                 type="text"
                 placeholder="Search Chapters..."
@@ -36,8 +36,6 @@ export default function PdfPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-3/4 md:w-1/2 border-gray-200 p-2 drop-shadow-md rounded-full mb-6 text-center"
             />
-
-            {/* PDF grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {filteredPdfs.map(pdf => (
                     <div
@@ -53,4 +51,3 @@ export default function PdfPage() {
         </div>
     );
 }
-
