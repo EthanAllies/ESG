@@ -1,113 +1,154 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import config from "../config.json";
 
 const QuizDetailPage = () => {
   const { quizId } = useParams(); // Get quizId from URL
+  const { dbUser } = useAuth(); // Access user data from AuthContext
+  const [quiz, setQuiz] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [score, setScore] = useState(null);
+  const navigate = useNavigate(); // Initialize navigate for redirection
 
-  const quizzes = [
-    {
-      id: 1,
-      title: "Welcome to the Student Guide",
-      score: 70,
-      description: "This is a student guide quiz.",
-      questions: [
-        {
-          id: 1,
-          question: "What is the capital of France?",
-          options: ["Berlin", "Madrid", "Paris", "Rome"],
-          answer: "Paris",
+  // Fetch the user's current score for the quiz from the database
+  const fetchCurrentScore = async (studentId, quizId) => {
+    try {
+      const response = await axios.get(`${config.api_url}/get-score`, {
+        params: {
+          studentId,
+          quizId,
         },
-        {
-          id: 2,
-          question: "What is 2 + 2?",
-          options: ["3", "4", "5", "6"],
-          answer: "4",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Culture Shock at UCT",
-      score: 85,
-      description: "A quiz about adapting to UCT.",
-      questions: [
-        {
-          id: 1,
-          question: "What is UCT?",
-          options: [
-            "University of Cape Town",
-            "University of Chicago",
-            "University of California",
-            "University College London",
-          ],
-          answer: "University of Cape Town",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Acing Exam Season",
-      score: 100,
-      description: "Quiz on how to ace exams.",
-      questions: [
-        {
-          id: 1,
-          question: "What is a good study technique?",
-          options: [
-            "Cramming",
-            "Spaced repetition",
-            "Studying the night before",
-            "Passive reading",
-          ],
-          answer: "Spaced repetition",
-        },
-      ],
-    },
-  ];
+      });
 
-  // Find the quiz by its id
-  const quiz = quizzes.find((q) => q.id === parseInt(quizId));
+      console.log("Fetched score:", response.data.score); // Debugging
 
-  const handleOptionClick = (questionId, option) => {
-    setSelectedAnswers({
-      ...selectedAnswers,
-      [questionId]: option,
-    });
+      return response.data.score;
+    } catch (error) {
+      console.error("Error fetching current score:", error);
+      return null;
+    }
   };
 
-  // If quiz is not found, show a message
-  if (!quiz) {
-    return <div>Quiz not found.</div>;
+  // Function to submit the score if it's higher than the existing score
+  async function submitQuizScore(studentId, quizId, newScore) {
+    console.log(studentId, quizId);
+    const currentScore = await fetchCurrentScore(studentId, quizId); // Fetch current score
+
+    // Only update the score if the new score is higher than the current score
+    if (currentScore === null || newScore > currentScore) {
+      try {
+        const response = await axios.patch(`${config.api_url}/update-score`, {
+          studentId,
+          quizId,
+          newScore,
+        });
+        console.log("Score update response:", response.data);
+      } catch (error) {
+        console.error("Error updating score:", error);
+      }
+    } else {
+      console.log(
+        "New score is not higher than the current score. No update made."
+      );
+    }
   }
+
+  useEffect(() => {
+    async function fetchQuiz() {
+      try {
+        const response = await axios.get(`${config.api_url}/quizzes/${quizId}`);
+        setQuiz(response.data);
+      } catch (err) {
+        console.error("Error fetching quiz details:", err);
+        setError("Failed to fetch quiz details.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchQuiz();
+  }, [quizId]);
+
+  const handleOptionChange = (questionId, option) => {
+    setSelectedAnswers((prevSelectedAnswers) => ({
+      ...prevSelectedAnswers,
+      [questionId]: option, // Ensure unique selection per question
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!quiz) return;
+
+    const totalQuestions = quiz.questions.length;
+    let correctAnswers = 0;
+
+    quiz.questions.forEach((question) => {
+      const selectedAnswer = selectedAnswers[question.question_id];
+      if (selectedAnswer === question.correct_answer) {
+        correctAnswers += 1;
+      }
+    });
+
+    // Calculate percentage
+    const percentage = (correctAnswers / totalQuestions) * 100;
+    setScore(percentage);
+
+    // Call submitQuizScore to send the data to the server only if the new score is higher
+    await submitQuizScore(dbUser._id, quizId, percentage);
+
+    // Navigate to QuizPage
+    navigate(`/quiz`);
+  };
+
+  if (loading) return <p>Loading quiz...</p>;
+  if (error) return <p>{error}</p>;
+  if (!quiz) return <p>Quiz not found.</p>;
 
   return (
     <div className="p-5 text-center">
-      <h1 className="text-4xl mb-4">{quiz.title}</h1>
-      <p className="text-lg mb-8">{quiz.description}</p>
-      <p className="text-2xl mb-4">Score: {quiz.score}%</p>
+      <h1 className="text-4xl mb-4">{quiz.quiz_name}</h1>
       <div>
         {quiz.questions.map((question) => (
-          <div key={question.id} className="mb-6 text-left">
-            <h2 className="text-xl mb-2">{question.question}</h2>
+          <div key={question.question_id} className="mb-6 text-left">
+            <h2 className="text-xl mb-2">{question.question_text}</h2>
             <div className="space-y-2">
               {question.options.map((option, index) => (
-                <button
-                  key={index}
-                  className={`w-full p-2 text-left border rounded ${
-                    selectedAnswers[question.id] === option
-                      ? "bg-gray-300"
-                      : "bg-white"
-                  }`}
-                  onClick={() => handleOptionClick(question.id, option)}
+                <div
+                  key={`${question.question_id}-option-${index}`}
+                  className="flex items-center"
                 >
-                  {option}
-                </button>
+                  <input
+                    type="radio"
+                    id={`question-${question.question_id}-option-${index}`}
+                    name={`question-${question.question_id}`} // Unique name per question
+                    value={option}
+                    checked={selectedAnswers[question.question_id] === option}
+                    onChange={() =>
+                      handleOptionChange(question.question_id, option)
+                    }
+                    className="mr-2"
+                  />
+                  <label
+                    htmlFor={`question-${question.question_id}-option-${index}`}
+                  >
+                    {option}
+                  </label>
+                </div>
               ))}
             </div>
           </div>
         ))}
       </div>
+      <button
+        className="mt-4 p-2 bg-blue-500 text-white rounded"
+        onClick={handleSubmit}
+      >
+        Submit
+      </button>
     </div>
   );
 };

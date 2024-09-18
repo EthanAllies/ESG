@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import config from '../config.json';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../config.json";
 
 export default function PdfPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -27,10 +27,10 @@ export default function PdfPage() {
         navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); 
     };
 
-    return (
-        <div className="flex flex-col items-center w-full h-full p-4 bg-white">
-            {/* Heading */}
-            <h1 className="text-3xl font-semibold mb-4">Chapters</h1>
+  return (
+    <div className="flex flex-col items-center w-full h-full p-4 bg-white">
+      {/* Heading */}
+      <h1 className="text-3xl font-semibold mb-4">Chapters</h1>
 
             {/* Search bar */}
             <input
@@ -57,3 +57,4 @@ export default function PdfPage() {
         </div>
     );
 }
+
