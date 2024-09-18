@@ -78,13 +78,16 @@ app.patch("/update-score", async (req, res) => {
     // Convert studentId to ObjectId
     const objectId = new ObjectId(studentId);
 
+    // Round the score
+    let roundedScore = parseFloat(newScore.toFixed(2));
+
     // Update the score
     const result = await client
       .db("ESG")
       .collection("students")
       .updateOne(
         { _id: objectId, "scores.quiz_id": quizId },
-        { $set: { "scores.$.score": newScore } }
+        { $set: { "scores.$.score": roundedScore } }
       );
 
     console.log("Update result:", result); // Log result to see if any documents were updated
