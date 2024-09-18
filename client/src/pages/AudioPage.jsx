@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../config.json';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export default function AudioPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [audios, setAudios] = useState([]);
     const [selectedAudioUrl, setSelectedAudioUrl] = useState(null); // State to store the selected audio URL
     const [selectedAudioName, setSelectedAudioName] = useState(''); // State to store the selected audio name
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
         fetchAudios();
@@ -26,6 +28,10 @@ export default function AudioPage() {
         setSelectedAudioName(audio.name); // Set the name of the selected audio
     };
 
+    const handleQuizClick = () => {
+        navigate('/quiz'); // Navigate to the quizzes page
+    };
+
     return (
         <div className="flex flex-col items-center w-full h-full p-4 bg-white">
             {/* Heading */}
@@ -40,16 +46,24 @@ export default function AudioPage() {
                 className="w-3/4 md:w-1/2 border-gray-200 p-2 drop-shadow-md rounded-full mb-6 text-center"
             />
 
-            {/* Conditional rendering of the selected audio name and iframe */}
+            {/* Conditional rendering of the selected audio name and audio controls */}
             {selectedAudioUrl && (
                 <div className="w-3/4 md:w-1/2 mb-4 text-center">
                     <h2 className="text-xl font-semibold mb-2">{selectedAudioName}</h2> {/* Display audio name */}
-                    <iframe
+                    <audio
+                        controls
                         src={selectedAudioUrl}
-                        className="w-full h-20 bg-white rounded"
-                        allow="autoplay"
-                        title="Audio Player"
-                    ></iframe>
+                        className="w-full bg-white rounded mb-2" // Added margin-bottom to ensure space for the link
+                    >
+                        Your browser does not support the audio element.
+                    </audio>
+                    {/* Quiz link */}
+                    <button
+                        onClick={handleQuizClick}
+                        className="inline-block px-4 py-2 mt-2 text-white bg-blue-500 rounded-full hover:bg-blue-600"
+                    >
+                        Go to Quiz
+                    </button>
                 </div>
             )}
 

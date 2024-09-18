@@ -11,20 +11,20 @@ import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<DashBoardPage />} />
-        <Route path="pdf" element={<PdfPage />} />
-        <Route path="pdf-viewer/:url" element={<PdfViewer />} />
-        <Route path="dashboard" element={<DashBoardPage />} />
-        <Route path="audio" element={<AudioPage />} />
-        <Route path="quiz" element={<QuizPage />} />
-        <Route path="quiz/:quizId" element={<QuizDetailPage />} />
-        <Route path="faqs" element={<FaqPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-      </Route>
-    </Routes>
-  );
+<Routes>
+  <Route path="/" element={<MainLayout/>}>
+    <Route index element={<DashBoardPage/>} />
+    <Route path="pdf" element={<PdfPage/>} />
+    <Route path="pdf-viewer/:id" element={<PdfViewer />} />
+    <Route path="dashboard" element={<DashBoardPage/>}/>
+    <Route path="audio" element={<AudioPage/>}/>
+    <Route path="quiz" element={<QuizPage/>}/>
+    <Route path="quiz/:quizId" element={<QuizDetailPage />} />    
+    <Route path="faqs" element={<FaqPage/>}/>
+    <Route path="profile" element={<ProfilePage/>}/>
+  </Route>
+</Routes>
+  )
 }
 
 export default App;
