@@ -27,7 +27,6 @@ export default function PdfPage() {
     //navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); // Pass encoded URL
 
     useEffect(() => {
-<<<<<<< HEAD
       if (id) {
         try {
           // Decode the URL and ensure it's safe to use
@@ -37,36 +36,6 @@ export default function PdfPage() {
         } catch (error) {
           console.error("Error decoding URL:", error);
           setLoading(false);
-=======
-        fetchPdfs()
-    }, [])
-
-    async function fetchPdfs(){
-        const httpResponse = await axios.get(`${config.api_url}/docs`) 
-        setPdfs(httpResponse.data)
-    }
-
-    const filteredPdfs = pdfs.filter(pdf =>
-        pdf.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const handlePdfClick = (pdf) => {
-        //window.location.href =pdf.url;
-        console.log("Selected PDF:", pdf); // Debugging line
-        navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); // Pass encoded URL
-
-    useEffect(() => {
-        if (id) {
-            try {
-                // Decode the URL and ensure it's safe to use
-                const decodedUrl = decodeURIComponent(id);
-                setPdfUrl(decodedUrl); 
-                setLoading(false); // Set loading to false since URL is ready
-            } catch (error) {
-                console.error('Error decoding URL:', error);
-                setLoading(false);
-            }
->>>>>>> 36b19acd997f89a53e15bc9eb81d35aee4c5bfc3
         }
       }
     }, [id]);

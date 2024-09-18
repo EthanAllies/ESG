@@ -4,12 +4,30 @@ export default function FaqPage() {
     const [expandedIndex, setExpandedIndex] = useState(null);
 
     const faqs = [
-        { question: "What is your return policy?", answer: "You can return items within 30 days of purchase for a full refund." },
-        { question: "How long does shipping take?", answer: "Shipping typically takes 5-7 business days." },
-        { question: "Do you offer international shipping?", answer: "Yes, we offer international shipping to most countries." },
-        { question: "What is your return policy?", answer: "You can return items within 30 days of purchase for a full refund." },
-        { question: "How long does shipping take?", answer: "Shipping typically takes 5-7 business days." },
-        { question: "Do you offer international shipping?", answer: "Yes, we offer international shipping to most countries." },
+        {
+            question: "What resources are available for science students?",
+            answer: "The guide provides access to academic journals, study groups, tutoring services, and online learning platforms."
+          },
+          {
+            question: "How do I access tutoring services?",
+            answer: "Tutoring services can be accessed through the student portal or by visiting the tutoring center on campus."
+          },
+          {
+            question: "What are the best ways to prepare for exams?",
+            answer: "Effective preparation includes reviewing lecture notes, using flashcards, forming study groups, and practicing past exam questions."
+          },
+          {
+            question: "How can I stay organized during the semester?",
+            answer: "Using planners, digital tools like Google Calendar, and following time management techniques such as the Pomodoro Method are great ways to stay organized."
+          },
+          {
+            question: "Where can I find information about internships?",
+            answer: "Internship opportunities are listed on the career services website and can also be found through networking events or your academic advisor."
+          },
+          {
+            question: "How do I get involved in research projects?",
+            answer: "You can reach out to professors, attend research fairs, or check with your department's office for available opportunities."
+          }
         
        
         // Add more FAQ items here
