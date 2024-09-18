@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import config from "../config.json";
@@ -11,7 +11,51 @@ const QuizDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [score, setScore] = useState(null); // New state for storing the score
+  const [score, setScore] = useState(null);
+  const navigate = useNavigate(); // Initialize navigate for redirection
+
+  // Fetch the user's current score for the quiz from the database
+  const fetchCurrentScore = async (studentId, quizId) => {
+    try {
+      const response = await axios.get(`${config.api_url}/get-score`, {
+        params: {
+          studentId,
+          quizId,
+        },
+      });
+
+      console.log("Fetched score:", response.data.score); // Debugging
+
+      return response.data.score;
+    } catch (error) {
+      console.error("Error fetching current score:", error);
+      return null;
+    }
+  };
+
+  // Function to submit the score if it's higher than the existing score
+  async function submitQuizScore(studentId, quizId, newScore) {
+    console.log(studentId, quizId);
+    const currentScore = await fetchCurrentScore(studentId, quizId); // Fetch current score
+
+    // Only update the score if the new score is higher than the current score
+    if (currentScore === null || newScore > currentScore) {
+      try {
+        const response = await axios.patch(`${config.api_url}/update-score`, {
+          studentId,
+          quizId,
+          newScore,
+        });
+        console.log("Score update response:", response.data);
+      } catch (error) {
+        console.error("Error updating score:", error);
+      }
+    } else {
+      console.log(
+        "New score is not higher than the current score. No update made."
+      );
+    }
+  }
 
   useEffect(() => {
     async function fetchQuiz() {
@@ -29,23 +73,21 @@ const QuizDetailPage = () => {
     fetchQuiz();
   }, [quizId]);
 
-  const handleOptionClick = (questionId, option) => {
+  const handleOptionChange = (questionId, option) => {
     setSelectedAnswers((prevSelectedAnswers) => ({
       ...prevSelectedAnswers,
-      [questionId]: option,
+      [questionId]: option, // Ensure unique selection per question
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!quiz) return;
 
     const totalQuestions = quiz.questions.length;
     let correctAnswers = 0;
 
     quiz.questions.forEach((question) => {
-      console.log(selectedAnswers);
       const selectedAnswer = selectedAnswers[question.question_id];
-      console.log(selectedAnswer);
       if (selectedAnswer === question.correct_answer) {
         correctAnswers += 1;
       }
@@ -54,6 +96,12 @@ const QuizDetailPage = () => {
     // Calculate percentage
     const percentage = (correctAnswers / totalQuestions) * 100;
     setScore(percentage);
+
+    // Call submitQuizScore to send the data to the server only if the new score is higher
+    await submitQuizScore(dbUser._id, quizId, percentage);
+
+    // Navigate to QuizPage
+    navigate(`/quiz`);
   };
 
   if (loading) return <p>Loading quiz...</p>;
@@ -63,28 +111,33 @@ const QuizDetailPage = () => {
   return (
     <div className="p-5 text-center">
       <h1 className="text-4xl mb-4">{quiz.quiz_name}</h1>
-      <p className="text-2xl mb-4">
-        Score: {score !== null ? `${score}%` : "Not submitted yet"}
-      </p>
       <div>
         {quiz.questions.map((question) => (
           <div key={question.question_id} className="mb-6 text-left">
             <h2 className="text-xl mb-2">{question.question_text}</h2>
             <div className="space-y-2">
               {question.options.map((option, index) => (
-                <button
-                  key={`${question.question_id}-option-${index}`} // Unique key combining question_id and index
-                  className={`w-full p-2 text-left border rounded ${
-                    selectedAnswers[question.question_id] === option
-                      ? "bg-gray-300"
-                      : "bg-white"
-                  }`}
-                  onClick={() =>
-                    handleOptionClick(question.question_id, option)
-                  }
+                <div
+                  key={`${question.question_id}-option-${index}`}
+                  className="flex items-center"
                 >
-                  {option}
-                </button>
+                  <input
+                    type="radio"
+                    id={`question-${question.question_id}-option-${index}`}
+                    name={`question-${question.question_id}`} // Unique name per question
+                    value={option}
+                    checked={selectedAnswers[question.question_id] === option}
+                    onChange={() =>
+                      handleOptionChange(question.question_id, option)
+                    }
+                    className="mr-2"
+                  />
+                  <label
+                    htmlFor={`question-${question.question_id}-option-${index}`}
+                  >
+                    {option}
+                  </label>
+                </div>
               ))}
             </div>
           </div>
