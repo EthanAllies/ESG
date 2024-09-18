@@ -5,16 +5,16 @@ import config from '../config.json';
 
 export default function PdfPage() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [pdfs, setPdfs] = useState([])
+    const [pdfs, setPdfs] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchPdfs()
-    }, [])
+        fetchPdfs();
+    }, []);
 
-    async function fetchPdfs(){
-        const httpResponse = await axios.get(`${config.api_url}/docs`) 
-        setPdfs(httpResponse.data)
+    async function fetchPdfs() {
+        const httpResponse = await axios.get(`${config.api_url}/docs`);
+        setPdfs(httpResponse.data);
     }
 
     const filteredPdfs = pdfs.filter(pdf =>
@@ -22,25 +22,10 @@ export default function PdfPage() {
     );
 
     const handlePdfClick = (pdf) => {
-        //window.location.href =pdf.url;
-        console.log("Selected PDF:", pdf); // Debugging line
-        navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); // Pass encoded URL
-
-    useEffect(() => {
-        if (id) {
-            try {
-                // Decode the URL and ensure it's safe to use
-                const decodedUrl = decodeURIComponent(id);
-                setPdfUrl(decodedUrl); 
-                setLoading(false); // Set loading to false since URL is ready
-            } catch (error) {
-                console.error('Error decoding URL:', error);
-                setLoading(false);
-            }
-        }
-    }, [id]);
+        console.log("Selected PDF URL:", pdf.url); // Debugging line to ensure URL is correct
+        // Use navigate to pass the encoded URL to the viewer page
+        navigate(`/pdf-viewer/${encodeURIComponent(pdf.url)}`); 
     };
-
 
     return (
         <div className="flex flex-col items-center w-full h-full p-4 bg-white">
@@ -53,12 +38,12 @@ export default function PdfPage() {
                 placeholder="Search Chapters..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-3/4 md:w-1/2  border-gray-200 p-2  drop-shadow-md rounded-full mb-6  text-center"
+                className="w-3/4 md:w-1/2 border-gray-200 p-2 drop-shadow-md rounded-full mb-6 text-center"
             />
 
             {/* PDF grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {pdfs.map(pdf => (
+                {filteredPdfs.map(pdf => (
                     <div
                         key={pdf._id}
                         className="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer"

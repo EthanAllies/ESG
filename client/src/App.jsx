@@ -14,7 +14,7 @@ function App() {
   <Route path="/" element={<MainLayout/>}>
     <Route index element={<DashBoardPage/>} />
     <Route path="pdf" element={<PdfPage/>} />
-    <Route path="pdf-viewer/:url" element={<PdfViewer />} />
+    <Route path="pdf-viewer/:id" element={<PdfViewer />} />
     <Route path="dashboard" element={<DashBoardPage/>}/>
     <Route path="audio" element={<AudioPage/>}/>
     <Route path="quiz" element={<QuizPage/>}/>
