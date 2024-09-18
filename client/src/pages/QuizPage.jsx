@@ -28,7 +28,12 @@ export default function QuizPage() {
     fetchQuizzes();
   }, [dbUser]);
 
-  if (loading) return <p>Loading quizzes...</p>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-start h-screen">
+        <p className="text-lg font-medium">Loading quizzes, please wait...</p>
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   return (
