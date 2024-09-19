@@ -88,7 +88,10 @@ const QuizDetailPage = () => {
 
     quiz.questions.forEach((question) => {
       const selectedAnswer = selectedAnswers[question.question_id];
-      if (selectedAnswer === question.correct_answer) {
+      if (
+        selectedAnswer === question.correct_answer ||
+        question.correct_answer === ""
+      ) {
         correctAnswers += 1;
       }
     });
