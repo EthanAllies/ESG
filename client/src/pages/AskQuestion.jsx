@@ -37,19 +37,19 @@ export default function AskQuestion() {
 
   const categories = [
     "Science",
-    "Technology",
-    "Mathematics",
-    "Health & Medicine",
-    "Social Sciences",
-    "Business",
-    "Arts & Humanities",
-    "Education",
+    "Feedback",
+    "Technical Issues",
+    "Communication",
+    "Advice",
+    "UCT",
+    "General",
+    "Other",
   ];
-
+//handle change of Category
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
   };
-
+//handle Question change
   const handleQuestionChange = (event) => {
     setQuestion(event.target.value);
   };
