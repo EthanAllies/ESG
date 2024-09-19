@@ -1,40 +1,47 @@
+
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext";
 
 export default function FaqPage() {
     const [expandedIndex, setExpandedIndex] = useState(null);
+    const navigate = useNavigate(); // Initialize navigate function
+
+    const { currentUser, logout, dbUser, setDBUser, getUser } = useAuth();
 
     const faqs = [
         {
             question: "What resources are available for science students?",
             answer: "The guide provides access to academic journals, study groups, tutoring services, and online learning platforms."
-          },
-          {
+        },
+        {
             question: "How do I access tutoring services?",
             answer: "Tutoring services can be accessed through the student portal or by visiting the tutoring center on campus."
-          },
-          {
+        },
+        {
             question: "What are the best ways to prepare for exams?",
             answer: "Effective preparation includes reviewing lecture notes, using flashcards, forming study groups, and practicing past exam questions."
-          },
-          {
+        },
+        {
             question: "How can I stay organized during the semester?",
             answer: "Using planners, digital tools like Google Calendar, and following time management techniques such as the Pomodoro Method are great ways to stay organized."
-          },
-          {
+        },
+        {
             question: "Where can I find information about internships?",
             answer: "Internship opportunities are listed on the career services website and can also be found through networking events or your academic advisor."
-          },
-          {
+        },
+        {
             question: "How do I get involved in research projects?",
             answer: "You can reach out to professors, attend research fairs, or check with your department's office for available opportunities."
-          }
-        
-       
-        // Add more FAQ items here
+        }
     ];
 
     const handleToggle = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
+    };
+
+    const handleAskQuestion = () => {
+        navigate('/ask-question'); // Navigate to the askQuestion page
     };
 
     return (
@@ -58,13 +65,24 @@ export default function FaqPage() {
                             </span>
                         </button>
                         {expandedIndex === index && (
-                            <div className="p-4 ounded-b-lg">
+                            <div className="p-4 rounded-b-lg">
                                 <p>{faq.answer}</p>
                             </div>
                         )}
                     </div>
                 ))}
             </div>
+            {/* Ask Question Button */}
+            {currentUser ? (
+              <button 
+              onClick={handleAskQuestion} 
+              className="btn-signup mt-4 pl-10 pr-10"
+          >
+              Ask a Question
+          </button>
+            ) : (
+              <h2></h2>
+            )}
         </div>
     );
 }
