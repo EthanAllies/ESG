@@ -176,12 +176,14 @@ const QuizDetailPage = () => {
           </div>
         ))}
       </div>
-      <button
-        className="mt-4 p-2 bg-blue-500 text-white rounded hover:text-blue-700"
-        onClick={handleSubmit}
-      >
-        Save & Submit
-      </button>
+      <div className="flex justify-center w-full">
+        <button
+          className="mt-4 p-2 bg-blue-500 text-white rounded hover:text-blue-700"
+          onClick={handleSubmit}
+        >
+          Save & Submit
+        </button>
+      </div>
     </div>
   );
 };
