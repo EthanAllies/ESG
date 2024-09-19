@@ -58,3 +58,6 @@ To deploy client
 
 ## Link to GitLab repository
     https://gitlab.cs.uct.ac.za/esgcapstone171/esg
+
+## Link to site
+    https://esg-uct.web.app/
