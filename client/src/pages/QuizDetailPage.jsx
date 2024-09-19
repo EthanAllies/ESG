@@ -140,12 +140,14 @@ const QuizDetailPage = () => {
       </button>
       {/* Centered Heading */}
       <div className="text-center">
-        <h1 className="text-4xl mb-4">{quiz.quiz_name}</h1>
+        <h1 className="text-4xl mb-4 font-bold">{quiz.quiz_name}</h1>
       </div>
       <div>
         {quiz.questions.map((question) => (
-          <div key={question.question_id} className="mb-6 text-left">
-            <h2 className="text-xl mb-2">{question.question_text}</h2>
+          <div key={question.question_id} className="m-12 mb-6 text-left">
+            <h2 className="text-xl mb-2 font-semibold">
+              {question.question_text}
+            </h2>
             <div className="space-y-2">
               {question.options.map((option, index) => (
                 <div
@@ -175,10 +177,10 @@ const QuizDetailPage = () => {
         ))}
       </div>
       <button
-        className="mt-4 p-2 bg-blue-500 text-white rounded"
+        className="mt-4 p-2 bg-blue-500 text-white rounded hover:text-blue-700"
         onClick={handleSubmit}
       >
-        Submit
+        Save & Submit
       </button>
     </div>
   );
