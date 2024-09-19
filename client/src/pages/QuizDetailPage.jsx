@@ -104,13 +104,44 @@ const QuizDetailPage = () => {
     navigate(`/quiz`);
   };
 
-  if (loading) return <p>Loading quiz...</p>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-start h-screen">
+        <p className="text-lg font-medium">Loading quiz, please wait...</p>
+      </div>
+    );
+
   if (error) return <p>{error}</p>;
+
   if (!quiz) return <p>Quiz not found.</p>;
 
   return (
-    <div className="p-5 text-center">
-      <h1 className="text-4xl mb-4">{quiz.quiz_name}</h1>
+    <div className="p-5">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/quiz")} // Navigate to QuizPage
+        className=" top-4 left-2 text-blue-500 hover:text-blue-700 focus:outline-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+      {/* Centered Heading */}
+      <div className="text-center">
+        <h1 className="text-4xl mb-4">{quiz.quiz_name}</h1>
+      </div>
       <div>
         {quiz.questions.map((question) => (
           <div key={question.question_id} className="mb-6 text-left">

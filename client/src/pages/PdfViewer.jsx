@@ -26,31 +26,20 @@ export default function PdfViewer() {
         navigate('/pdf'); // Navigate back to the PdfPage
     };
 
-    return (
-        <div className="flex h-screen bg-white p-4">
-            {/* Left column for the PDF viewer */}
-            <div className="w-2/3 p-4 flex flex-col relative">
-                <div className="flex-1 overflow-auto">
-                    {loading ? (
-                        <p>Loading PDF...</p>
-                    ) : pdfUrl ? (
-                        <iframe
-                            src={pdfUrl} // Use the decoded PDF URL
-                            type="application/pdf"
-                            width="100%"
-                            height="100%"
-                            title="PDF Viewer"
-                        >
-                            Loading PDF...
-                        </iframe>
-                    ) : (
-                        <p>Error loading PDF.</p>
-                    )}
-                </div>
-            </div>
+    const handleQuizClick = () => {
+        navigate('/quiz'); // Navigate to the quizzes page
+    };
 
-            {/* Right column for quiz and discussion links */}
-            <div className="w-1/3 p-4 flex flex-col justify-between">
+    const handleFaqClick = () => {
+        navigate('/faqs'); // Navigate to the FAQ page
+    };
+
+    return (
+        <div className="flex min-h-screen bg-white p-4 overflow-auto"> 
+            {/* Remove h-screen and allow for content to grow beyond the screen height */}
+    
+            {/* Left column for the PDF viewer */}
+            <div className="m-6 w-2/3 p-4 flex flex-col relative">
                 {/* Back Button */}
                 <button
                     onClick={handleBackClick}
@@ -72,15 +61,53 @@ export default function PdfViewer() {
                         />
                     </svg>
                 </button>
-
+                <div className="flex-1 overflow-auto">
+                    {loading ? (
+                        <p>Loading PDF...</p>
+                    ) : pdfUrl ? (
+                        <iframe
+                            src={pdfUrl} // Use the decoded PDF URL
+                            type="application/pdf"
+                            width="100%"
+                            height="600px" // Adjust this if needed to increase space
+                            title="PDF Viewer"
+                        >
+                            Loading PDF...
+                        </iframe>
+                    ) : (
+                        <p>Error loading PDF.</p>
+                    )}
+                </div>
+            </div>
+    
+            {/* Right column for quiz and FAQ blocks */}
+            <div className="w-1/3 p-4 flex flex-col justify-between">
                 {/* Quiz Block */}
-                <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md text-center mb-4">
-                    <h3 className="text-lg font-semibold">Quiz</h3>
-                    <a href="/quiz" className="text-blue-500 hover:underline">
-                        Go to the Quiz
-                    </a>
+                <div className="flex-grow flex items-center justify-center mb-4">
+                    <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md text-center">
+                        <h3 className="text-lg font-semibold mb-2">Complete this chapter's quiz to earn a badge!</h3>
+                        <button
+                            onClick={handleQuizClick}
+                            className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-600"
+                        >
+                            Go to Quiz
+                        </button>
+                    </div>
+                </div>
+    
+                {/* FAQ Block */}
+                <div className="flex-grow flex items-center justify-center">
+                    <div className="w-full p-4 bg-gray-100 rounded-lg shadow-md text-center">
+                        <h3 className="text-lg font-semibold mb-2">Have questions you want to ask? Check out the FAQ to see others questions and to ask your own!</h3>
+                        <button
+                            onClick={handleFaqClick}
+                            className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-600"
+                        >
+                            Go to FAQ
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     );
-}
+}    

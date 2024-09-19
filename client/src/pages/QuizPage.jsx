@@ -28,18 +28,23 @@ export default function QuizPage() {
     fetchQuizzes();
   }, [dbUser]);
 
-  if (loading) return <p>Loading quizzes...</p>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-start h-screen">
+        <p className="text-lg font-medium">Loading quizzes, please wait...</p>
+      </div>
+    );
   if (error) return <p>{error}</p>;
 
   return (
     <div className="p-5 text-center">
       {currentUser ? (
-        <h1 className="text-4xl mb-8">
+        <h1 className="font-bold text-4xl mb-8">
           Quizzes for {dbUser?.displayName || "User"}
         </h1>
       ) : (
         <div className="p-5 text-center">
-          <h1 className="text-4xl mb-8">Please Sign In</h1>
+          <h1 className="text-4xl mb-8 font-bold">Please Sign In</h1>
           <p>You need to sign in or create an account to view the quizzes</p>
         </div>
       )}
@@ -62,6 +67,7 @@ export default function QuizPage() {
                     title={quiz.quiz_name}
                     score={score}
                     link={`/quiz/${quiz.quiz_id}`}
+                    quizId={quiz.quiz_id}
                   />
                 </Link>
               </div>

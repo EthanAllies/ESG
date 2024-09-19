@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function QuizProgressCard({ title, score, link }) {
+export default function QuizProgressCard({ title, score, link, quizId }) {
   return (
     <div className="quiz-card border border-gray-300 rounded-lg p-5 w-full text-center shadow-lg">
-      <h3 className="quiz-title text-2xl mb-2">{title}</h3>
+      <h3 className="quiz-title text-2xl mb-2 font-semibold">{title}</h3>
       <p className="score text-lg mb-2">Score: {score}%</p>
 
       {score === 100 ? (
@@ -17,12 +17,22 @@ export default function QuizProgressCard({ title, score, link }) {
         </div>
       )}
 
-      <a
-        href={link}
-        className="link inline-block px-4 py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Take Quiz
-      </a>
+      {score === 100 ? (
+        <div className="">
+          <img
+            src={`badge${quizId}.png`}
+            alt="Perfect Score Badge"
+            className="badge-img w-24 h-24 mx-auto"
+          />
+        </div>
+      ) : (
+        <a
+          href={link}
+          className="link inline-block px-4 py-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Take Quiz
+        </a>
+      )}
     </div>
   );
 }
