@@ -3,12 +3,28 @@ import { Link } from "react-router-dom"; // Make sure Link is imported
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import config from "../config.json";
+import { useNavigate } from "react-router-dom";
 
 export default function DashBoardPage() {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { currentUser, dbUser } = useAuth(); // Access user data
+  const navigate = useNavigate(); // Initialize navigate for redirection
+
+  const handle1ButtonClick = () => {
+    const pdfUrl = encodeURIComponent(
+      "https://firebasestorage.googleapis.com/v0/b/esga-e2e04.appspot.com/o/CultureShockAtUCT.pdf?alt=media&token=89e1e3bf-f7ef-4429-8b51-932a98b4762b"
+    );
+    navigate(`/pdf-viewer/${pdfUrl}`); // Navigate to PDF viewer with the encoded URL
+  };
+
+  const handle2ButtonClick = () => {
+    const pdfUrl = encodeURIComponent(
+      "https://firebasestorage.googleapis.com/v0/b/esga-e2e04.appspot.com/o/SoHowDoesYourBrainWork.pdf?alt=media&token=4c4ec68e-2c3d-4e15-9947-b411d6ce7e1a"
+    );
+    navigate(`/pdf-viewer/${pdfUrl}`); // Navigate to PDF viewer with the encoded URL
+  };
 
   // Fetch quizzes from the backend
   async function fetchQuizzes() {
@@ -40,7 +56,13 @@ export default function DashBoardPage() {
       : "opacity-40 grayscale";
   };
 
-  if (loading) return <p>Loading quizzes...</p>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-start h-screen">
+        <p className="text-lg font-medium">Loading dashboard, please wait...</p>
+      </div>
+    );
+
   if (error) return <p>{error}</p>;
 
   return (
@@ -166,7 +188,10 @@ export default function DashBoardPage() {
               </div>
 
               <div className="w-1/2 h-full flex justify-center items-center">
-                <button className="bg-regal-blue w-5/6 py-2 drop-shadow-lg text-white font-semibold hover:bg-slate-700 rounded-3xl">
+                <button
+                  onClick={handle1ButtonClick} // Handle button click
+                  className="bg-regal-blue w-5/6 py-2 drop-shadow-lg text-white font-semibold hover:bg-slate-700 rounded-3xl"
+                >
                   View
                 </button>
               </div>
@@ -182,7 +207,10 @@ export default function DashBoardPage() {
               </div>
 
               <div className="w-1/2 h-full flex justify-center items-center">
-                <button className="bg-regal-blue w-5/6 py-2 drop-shadow-lg text-white font-semibold hover:bg-slate-700 rounded-3xl">
+                <button
+                  onClick={handle2ButtonClick} // Attach the click handler
+                  className="bg-regal-blue w-5/6 py-2 drop-shadow-lg text-white font-semibold hover:bg-slate-700 rounded-3xl"
+                >
                   View
                 </button>
               </div>
