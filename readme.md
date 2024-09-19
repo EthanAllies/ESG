@@ -51,6 +51,10 @@ To deploy client
 > npm run deploy-client
 ```
 
+
     
 ## Server
     Express server MongoDB 
+
+## Link to GitLab repository
+    https://gitlab.cs.uct.ac.za/esgcapstone171/esg
