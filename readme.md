@@ -1,13 +1,5 @@
 ## Client
 
-React client
-
-To run the project cd into client and run command
-
-```bash
-> cd client
-> npm run dev
-```
 
 To login to firebase cli (command line interface)
 
@@ -32,6 +24,31 @@ To show react forms
 Connect to firebase
 ```bash
 > npm install firebase
+```
+
+To install all packages needed
+```bash
+> npm i
+```
+
+To start server
+```bash
+> npm run start-server
+```
+
+To start client
+```bash
+> npm run start-client
+```
+
+To deploy server
+```bash
+> npm run deploy-server
+```
+
+To deploy client
+```bash
+> npm run deploy-client
 ```
 
     

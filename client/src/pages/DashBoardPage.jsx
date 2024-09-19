@@ -79,8 +79,8 @@ export default function DashBoardPage() {
           <div className="relative h-60 w-4/5 mt-11 rounded-2xl drop-shadow-xl object-contain bg-gradient-to-r from-regal-blue from-10% to-blue-300 flex flex-row justify-between items-center overflow-hidden">
             <h className="absolute z-10 text-white text-3xl font-semibold tracking-wide drop-shadow-2xl max-w-full transform transition-transform duration-500 sm:translate-x-16 md:translate-x-12 lg:translate-x-8 xl:translate-x-6">
               {currentUser
-                ? `Welcome Back, ${dbUser.displayName}!` // Personalized greeting if logged in
-                : "Welcome To The Science Student Guide!"} // Default greeting if not logged in
+                ? `Welcome Back, ${dbUser.displayName}!`
+                : "Welcome To The Science Student Guide!"}
             </h>
             <img
               src="userDash.png"
