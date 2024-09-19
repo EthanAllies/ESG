@@ -209,4 +209,46 @@ app.patch("/user", async (req, res) => {
   }
 });
 
+app.post("/question", async (req, res) => {
+  const { email, question, category } = req.body;
+
+  // Validate that email, question, and category are provided
+  if (!email || !question || !category) {
+    return res.status(400).json({
+      error: "Email, question, and category are required for submitting a question",
+    });
+  }
+
+  try {
+    // Connect the client to the server
+    await client.connect();
+
+    // Insert a new document with the provided email, question, and category
+    const result = await client
+      .db("ESG")
+      .collection("questions")
+      .insertOne({
+        email: email,
+        question: question,
+        category: category,
+        createdAt: new Date(), // Optional: add a timestamp
+      });
+
+    res.status(201).json({
+      message: "Question submitted successfully",
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: "An error occurred while submitting the question",
+      details: error,
+    });
+  } finally {
+    // Optionally close the MongoDB connection if not using a persistent connection
+    // await client.close();
+  }
+}
+
+);
+
 module.exports = app;
